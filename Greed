@@ -1,0 +1,189 @@
+import java.util.Scanner;
+
+public class MyProgram
+{
+    //meathods: roll die, show dice, return player's total
+    
+    public static void main(String[] args)
+    {
+        //Scanner
+        Scanner sus = new Scanner(System.in);
+        
+        //Declare variables
+        int scoreP = 0, scoreA = 0, die1 = 0, die2 = 0, additive = 0;
+        String cIn;
+        boolean winner = false;
+        
+        //Open program
+        System.out.println("Welcome to Greed! Enter 's' to start: ");
+        cIn = sus.nextLine();
+        
+        //Check for invalid inputs
+        while (!(cIn.equals("s")) && !(cIn.equals("S")))
+        {
+            System.out.println("Invalid input, submit again: ");
+            cIn = sus.nextLine();
+        }
+        
+        //Entire Game
+        while (scoreP < 100 && scoreA < 100)
+        {
+            //PLAYER'S TURN START
+            System.out.println("Player's turn:");
+            
+            //Turn keeps going until there is a one, Player stops it, or Player wins
+            while (die1 != 1 && die2 != 1 && !(cIn.equals("n")) && !(cIn.equals("N")) && scoreP + additive < 100)
+            {
+                System.out.println("Enter 'r' to roll the dice:");
+                cIn = sus.nextLine();
+                
+                //Check for invalid inputs
+                while (!(cIn.equals("r")) && !(cIn.equals("R")))
+                {
+                    System.out.println("Invalid input, submit again:");
+                    cIn = sus.nextLine();
+                }
+                
+                //Roll and print the dice
+                die1 = RollDie();
+                PrintDie(die1);
+                die2 = RollDie();
+                PrintDie(die2);
+                
+                //Calculate additives and determine whether there has been a one
+                if (die1 != 1 && die2 != 1)
+                {
+                    additive += (die1 + die2);
+                }
+                else
+                {
+                    additive = 0;
+                }
+                
+                System.out.println(die1 + " + " + die2 + " = " + additive);
+                
+                //Check for ones
+                if (additive != 0 && scoreP + additive < 100)
+                {
+                    //Ask player if they would like to roll again
+                    System.out.println("Continue? y/n");
+                    cIn = sus.nextLine();
+                    
+                    //Check for invalid inputs
+                    while (!(cIn.equals("y")) && !(cIn.equals("Y")) && !(cIn.equals("n")) && !(cIn.equals("N")))
+                    {
+                        System.out.println("Invalid input, submit again:");
+                        cIn = sus.nextLine();
+                    }
+                }
+            }
+            
+            //Define and state the Player's score
+            scoreP = Total(scoreP, additive);
+            System.out.println("The Player's score is " + scoreP + "\nEnter anything to continue:");
+            cIn = sus.nextLine();
+            //PLAYER'S TURN END
+            
+            //Reset variables
+            cIn = "";
+            die1 = 0;
+            die2 = 0;
+            additive = 0;
+            
+            //Check if Player won.
+            if (scoreP >= 100)
+            {
+                winner = true;
+                break;
+            }
+            
+            //AUTONOMOUS TURN START
+            System.out.println("Autonomous turn:");
+            
+            //Turn continues until there's a one, Autonomous wins, or the additive is above 20
+            while (die1 != 1 && die2 != 1 && scoreA + additive < 100 && additive < 20)
+            {
+                //Roll and print the dice
+                die1 = RollDie();
+                PrintDie(die1);
+                die2 = RollDie();
+                PrintDie(die2);
+                
+                //Calculate additives and determine whether there has been a one
+                if (die1 != 1 && die2 != 1)
+                {
+                    additive += (die1 + die2);
+                }
+                else
+                {
+                    additive = 0;
+                }
+                
+                System.out.println(die1 + " + " + die2 + " = " + additive);
+            }
+            
+            //Define and state the Autonomous' score
+            scoreA = Total(scoreA, additive);
+            System.out.println("The Autonomous' score is " + scoreA);
+            //AUTONOMOUS TURN END
+            
+            //Reset variables
+            die1 = 0;
+            die2 = 0;
+            additive = 0;
+        }
+        //Game Ends
+        
+        //Stating the victor
+        if (winner)
+        {
+            System.out.println("Congratulations Player, you won!");
+        }
+        else
+        {
+            System.out.println("\nMost unfortunate Player, Autonomous is triumphant.");
+        }
+        
+    }
+    
+    public static int RollDie()
+    {
+        //Determine which side die lands on
+        return (int)(Math.random()*6 + 1);
+    }
+    
+    public static int Total(int score, int tAdditive)
+    {
+        //Literally a '+=' statement
+        return (score + tAdditive);
+    }
+    
+    public static void PrintDie(int side)
+    {
+        //Determines which die to print, and well... prints it
+        if (side == 1)
+        {
+            System.out.println("___________\n|         |\n|    _    |\n|   |_|   |\n|         |\n|_________|");
+        }
+        else if (side == 2)
+        {
+            System.out.println("___________\n|         |\n|  _   _  |\n| |_| |_| |\n|         |\n|_________|");
+        }
+        else if (side == 3)
+        {
+            System.out.println("___________\n| _       |\n||_| _    |\n|   |_| _ |\n|      |_||\n|_________|");
+        }
+        else if (side == 4)
+        {
+            System.out.println("___________\n|  _   _  |\n| |_| |_| |\n|  _   _  |\n| |_| |_| |\n|_________|");
+        }
+        else if (side == 5)
+        {
+            System.out.println("___________\n|  _   _  |\n| |_|_|_| |\n|  _|_|_  |\n| |_| |_| |\n|_________|");
+        }
+        else
+        {
+            System.out.println("___________\n|  _   _  |\n| |_| |_| |\n| |_| |_| |\n| |_| |_| |\n|_________|");
+        }
+    }
+}
